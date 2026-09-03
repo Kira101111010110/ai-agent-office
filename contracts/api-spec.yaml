@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: Todo List API
+  version: 1.0.0
+  description: >
+    สัญญากลางระหว่าง backend กับ frontend — ห้ามเปลี่ยน shape ของ endpoint ใดๆ
+    โดยไม่แก้ไฟล์นี้ก่อน แล้วให้อีกฝั่งรับทราบ
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /todos:
+    get:
+      summary: ดึงรายการ todo ทั้งหมด
+      responses:
+        "200":
+          description: รายการ todo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todo"
+    post:
+      summary: สร้าง todo ใหม่
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoInput"
+      responses:
+        "201":
+          description: สร้างสำเร็จ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "400":
+          description: title ว่างหรือขาดหาย
+
+  /todos/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: ดึง todo รายการเดียว
+      responses:
+        "200":
+          description: todo ที่ขอ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "404":
+          description: ไม่พบ todo นี้
+    put:
+      summary: แก้ไข todo (รวมถึงการ toggle completed)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoUpdate"
+      responses:
+        "200":
+          description: แก้ไขสำเร็จ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "404":
+          description: ไม่พบ todo นี้
+    delete:
+      summary: ลบ todo
+      responses:
+        "204":
+          description: ลบสำเร็จ ไม่มี body
+        "404":
+          description: ไม่พบ todo นี้
+
+components:
+  schemas:
+    Todo:
+      type: object
+      required: [id, title, completed, created_at, updated_at]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        completed:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    TodoInput:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+
+    TodoUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+        completed:
+          type: boolean
