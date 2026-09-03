@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Todo List</h1>
+
+    <div id="error-message" class="error-message" hidden></div>
+
+    <form id="todo-form">
+      <input
+        type="text"
+        id="todo-title-input"
+        name="title"
+        placeholder="Title"
+        required
+      />
+      <textarea
+        id="todo-description-input"
+        name="description"
+        placeholder="Description (optional)"
+      ></textarea>
+      <button type="submit">Add Todo</button>
+    </form>
+
+    <ul id="todo-list"></ul>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
